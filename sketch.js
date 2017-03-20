@@ -6,16 +6,15 @@ var difficulty = 40;
 var hit = false;
 var colorCounter = 0;
 var clearer = true;
-var vertList = [];
 var polyRad = 200;
 var polyPoints = 8;
 var angle = 6.283185307179586/polyPoints;
+// 153.07337294603593
 
 function setup() {
 	var myCanvas = createCanvas(600, 400);
 	myCanvas.parent("canvas");
 	frameRate(30);
-	for (var i = 0; i < 6.283185307179586; i += angle) vertList.push(i);
 	for (var i = 0; i < difficulty; i++) particles.push(new Particle(ColorID(randomWholeNum(3))));
 	playerObj = new Player(polyRad, polyPoints);
 }
@@ -31,13 +30,12 @@ function recursePoly(x, y, theta)
 	var a = (width/2) + cos(theta+angle)*polyRad;
 	var b = (height/2) + sin(theta+angle)*polyRad;
 	recursePoly(a, b, theta+angle);
-	var vert = {
-		'x': x,
-		'y': y,
-		'a': a,
-		'b': b
-	};
-	vertList.push(vert);
+	vertDist = dist(x, y, a, b);
+	stroke(100);
+	var m = (b-y)/(a-x);
+	var xPrime = -m*(b-y-(x/m));
+	line(x, y, xPrime, b);
+	stroke(255);
 	return line(x, y, a, b);
 }
 
@@ -46,31 +44,17 @@ function draw()
 	var hit;
 	var hitCounter = 0;
 	background('black');
-	stroke(255);
 	var x = recursePoly((width/2) + cos(0)*polyRad, (height/2) + sin(0)*polyRad, 0);
 	playerObj.display();
 
-	for (var i = 0; i < vertList.length; i++) {
-		// hit = collideLineRect(x1, y1, x2, y2, rx, ry, rw, rh, [calcIntersection])
-		var vert = vertList[i];
-		hit = collideLineRect(vert.a, vert.b, vert.x, vert.y, playerObj.x, playerObj.y, playerObj.sizeX, playerObj.sizeY);
-		if (hit) {
-			hitCounter++;
-			console.log("collision detected");
-		}
+	if (keyIsDown(LEFT_ARROW)) {
+		// if (dist(playerObj.x, playerObj.y, ) {}
+		playerObj.x-=10;
 	}
 
-	if (hitCounter == 0)
-	{		
-		if (keyIsDown(LEFT_ARROW)) {
-
-			playerObj.x-=10;
-		}
-
-		if (keyIsDown(RIGHT_ARROW)) {
-			playerObj.x+=10;
-			// playerObj.y -= (sin(3.14/16)/cos(3.14/16)); 
-		}
+	if (keyIsDown(RIGHT_ARROW)) {
+		playerObj.x+=10;
+		// playerObj.y -= (sin(3.14/16)/cos(3.14/16)); 
 	}
 	/*
 	if (playerObj.lives > 0) 
@@ -160,7 +144,7 @@ function Player(r, n)
 
 	this.display = function()
 	{
-		translate(width/2, ((height/2)+(sin(angle*6)))+(polyRad-30));
+		translate(((width/2)+(cos(angle*6)))+(50), (((height/2)+(sin(angle*6)))+(polyRad-50)));
 		fill(this.color);
 		rotate(-(3.14/8));
 		rect(this.x, this.y, this.sizeX, this.sizeY);
