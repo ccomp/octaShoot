@@ -1,8 +1,4 @@
-var playerObj, vertDist;
-var particles = [];
-var counter1 = 0;
-var counter2 = 1;
-var difficulty = 40;
+var playerObj;
 var hit = false;
 var colorCounter = 0;
 var clearer = true;
@@ -15,9 +11,10 @@ function setup() {
 	var myCanvas = createCanvas(600, 400);
 	myCanvas.parent("canvas");
 	frameRate(30);
-	for (var i = 0; i < difficulty; i++) particles.push(new Particle(ColorID(randomWholeNum(3))));
-	playerObj = new Player(polyRad, polyPoints);
+	playerObj = new Player(); //add invincibility frames to each player upon loading in
 	gameState = new Game();
+	gameState.playerList.push(playerObj);
+	rectMode(CORNER);
 }
 
 function randomWholeNum(range) {
@@ -57,10 +54,35 @@ function draw()
 
 	var x = recursePoly(cos(0)*polyRad, sin(0)*polyRad, 0);
 
+	for (var i = 0; i < gameState.particles.length; i++) {
+		gameState.particles[i].y -= 5;
+		gameState.particles[i].display();
+	}
+
+
+	// spoof collision:
+	// if the particle has reached close to -150
+	// make an invisible particle
+	// if that particle collides with the rect
+	// then declare collision
 	rotate(radians(gameState.deg)); //note that this can be pushed easily to the server
-	playerObj.display();
+	for (var i = 0; i < gameState.playerList.length; i++) {
+		for (var j = 0; j < gameState.particles.length; j++) {
+			// if (radians(gameState.deg) >= (gameState.particles[j].deg-0.5) && radians(gameState.deg) <= (gameState.particles[j].deg+0.5)) {
+			// 	hit = collideRectCircle(gameState.playerList[i].x,gameState.playerList[i].y - 150,gameState.playerList[i].sizeX,gameState.playerList[i].sizeY,gameState.particles[j].x,gameState.particles[j].y,gameState.particles[j].size);
+			// 	if (hit) console.log('collision');
+			// }
+		}
+		gameState.playerList[i].display();
+	}
 }
 
+function keyPressed() {
+	if (keyCode === 32) {
+		particleNew = new Particle(playerObj.x+25, playerObj.y + 150, gameState.deg);
+		gameState.particles.push(particleNew);
+	}
+}
 
 function ColorID(integer)
 {
@@ -73,20 +95,19 @@ function ColorID(integer)
 	}
 }
 
-function Player(r, n)
+function Player()
 {
-	var angle = 6.283185307179586/n;
 	this.x = 0;
 	this.y = 0;
 	this.sizeX = 50;
-	this.sizeY = 25;
+	this.sizeY = 15;
 	this.color = "blue";
 	this.lives = 3;
 	this.points = 0;
 
 	this.display = function()
 	{
-		translate(0, 150);
+		translate(0, 160);
 		fill(this.color);
 		rect(this.x, this.y, this.sizeX, this.sizeY);
 	}
@@ -100,20 +121,25 @@ function Player(r, n)
 	}
 }
 
-function Particle(color)
+function Particle(x, y, deg)
 {
-	this.color = color;
-	this.x = randomWholeNum(width);
-	this.y = 0;
-	this.size = 20;
-
+	this.color = "red";
+	this.x = x;
+	this.y = y;
+	this.size = 10;
+	this.deg = radians(deg);
 	this.display = function()
 	{
 		fill(this.color);
+		push();
+		rotate(this.deg);
 		ellipse(this.x, this.y, this.size, this.size);
+		pop();
 	}
 }
 
 function Game() {
 	this.deg = 0;
+	this.particles = [];
+	this.playerList = [];
 }
