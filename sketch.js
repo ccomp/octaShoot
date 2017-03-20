@@ -28,8 +28,8 @@ function randomWholeNum(range) {
 function recursePoly(x, y, theta)
 {
 	if (theta >= 6.283185307179586) return;
-	var a = (width/2) + cos(theta+angle)*polyRad;
-	var b = (height/2) + sin(theta+angle)*polyRad;
+	var a = cos(theta+angle)*polyRad;
+	var b = sin(theta+angle)*polyRad;
 	recursePoly(a, b, theta+angle);
 	// vertDist = dist(x, y, a, b);
 	// stroke(100);
@@ -42,34 +42,23 @@ function recursePoly(x, y, theta)
 
 function draw() 
 {
-	// translate(width/2, height/2);
+	translate(width/2, height/2);
 	var hit;
 	var hitCounter = 0;
 	background('black');
 
 	if (keyIsDown(LEFT_ARROW)) {
-		gameState.deg -= 10;
+		gameState.deg += 5;
 	}
 
 	if (keyIsDown(RIGHT_ARROW)) {
-		gameState.deg += 10;
+		gameState.deg -= 5;
 	}
 
-	rotate(radians(gameState.deg));
+	var x = recursePoly(cos(0)*polyRad, sin(0)*polyRad, 0);
 
-	var x = recursePoly((width/2) + cos(0)*polyRad, (height/2) + sin(0)*polyRad, 0);
-
-
-	// if (keyIsDown(LEFT_ARROW)) {
-	// 	playerObj.update(-10);
-	// }
-
-	// if (keyIsDown(RIGHT_ARROW)) {
-	// 	playerObj.update(10);
-	// }
-
+	rotate(radians(gameState.deg)); //note that this can be pushed easily to the server
 	playerObj.display();
-
 }
 
 
@@ -87,8 +76,6 @@ function ColorID(integer)
 function Player(r, n)
 {
 	var angle = 6.283185307179586/n;
-	// this.x = (cos(angle)*r) + width/2;
-	// this.y = (sin(angle)*r) + height/2;
 	this.x = 0;
 	this.y = 0;
 	this.sizeX = 50;
@@ -96,22 +83,12 @@ function Player(r, n)
 	this.color = "blue";
 	this.lives = 3;
 	this.points = 0;
-	this.deg = 0;
 
 	this.display = function()
 	{
-		// translate(((width/2)+(cos(angle*6)))+(50), (((height/2)+(sin(angle*6)))+(polyRad-50)));
-		translate((width/2), (height/2)+150);
+		translate(0, 150);
 		fill(this.color);
-		// rotate(-(3.14/8));
-
-		rotate(this.deg);
 		rect(this.x, this.y, this.sizeX, this.sizeY);
-	}
-
-	this.update = function(deg)
-	{
-		this.deg += radians(deg);
 	}
 
 	this.interaction = function(color)
