@@ -28,11 +28,6 @@ function recursePoly(x, y, theta)
 	var a = cos(theta+angle)*polyRad;
 	var b = sin(theta+angle)*polyRad;
 	recursePoly(a, b, theta+angle);
-	// vertDist = dist(x, y, a, b);
-	// stroke(100);
-	// var m = (b-y)/(a-x);
-	// var xPrime = -m*(b-y-(x/m));
-	// line(x, y, xPrime, b);
 	stroke(255);
 	return line(x, y, a, b);
 }
@@ -41,18 +36,19 @@ function draw()
 {
 	translate(width/2, height/2);
 	var hit;
-	var hitCounter = 0;
 	background('black');
 
 	if (keyIsDown(LEFT_ARROW)) {
-		gameState.deg += 5;
+		gameState.deg += (Math.PI);
 	}
 
 	if (keyIsDown(RIGHT_ARROW)) {
-		gameState.deg -= 5;
+		gameState.deg -= Math.PI;
 	}
 
+	push();
 	var x = recursePoly(cos(0)*polyRad, sin(0)*polyRad, 0);
+	pop();
 
 	for (var i = 0; i < gameState.particles.length; i++) {
 		gameState.particles[i].y -= 5;
@@ -68,19 +64,33 @@ function draw()
 	rotate(radians(gameState.deg)); //note that this can be pushed easily to the server
 	for (var i = 0; i < gameState.playerList.length; i++) {
 		for (var j = 0; j < gameState.particles.length; j++) {
-			// if (radians(gameState.deg) >= (gameState.particles[j].deg-0.5) && radians(gameState.deg) <= (gameState.particles[j].deg+0.5)) {
-			// 	hit = collideRectCircle(gameState.playerList[i].x,gameState.playerList[i].y - 150,gameState.playerList[i].sizeX,gameState.playerList[i].sizeY,gameState.particles[j].x,gameState.particles[j].y,gameState.particles[j].size);
-			// 	if (hit) console.log('collision');
-			// }
+			if (gameState.particles[j].y == -150) {
+
+				console.log(gameState.particles[j].opp);
+				console.log(gameState.deg);
+				// var particleX = new Particle(gameState.particles[j].x, gameState.particles[j].y, gameState.deg, "black");
+				// hit = collideRectCircle(gameState.playerList[i].x,gameState.playerList[i].y,gameState.playerList[i].sizeX,gameState.playerList[i].sizeY,particleX.x,particleX.y,particleX.size);
+				
+				// if (hit) {
+				// 	console.log("collision");
+				// }
+			}
 		}
 		gameState.playerList[i].display();
+		// if (gameState.deg <= -360 || gameState.deg >= 360) gameState.deg = 0;
+		if (gameState.deg <= 0) {
+			gameState.deg += 360;
+		} else if (gameState.deg >= 360) {
+			gameState.deg -= 360;
+		}
 	}
 }
 
 function keyPressed() {
 	if (keyCode === 32) {
-		particleNew = new Particle(playerObj.x+25, playerObj.y + 150, gameState.deg);
+		particleNew = new Particle(playerObj.x+25, playerObj.y + 150, gameState.deg, "red");
 		gameState.particles.push(particleNew);
+		console.log(gameState.deg);
 	}
 }
 
@@ -121,13 +131,24 @@ function Player()
 	}
 }
 
-function Particle(x, y, deg)
+var toDegree = function (radians) {
+    return radians * (180 / Math.PI);
+}
+
+function Particle(x, y, deg, color)
 {
-	this.color = "red";
+	this.color = color;
 	this.x = x;
 	this.y = y;
 	this.size = 10;
 	this.deg = radians(deg);
+	var anti;
+	if (deg + 180 >= 360) {
+		anti = deg - 180;
+	} else if (deg - 180 <= 0) {
+		anti = deg + 180;
+	}
+	this.opp = anti;
 	this.display = function()
 	{
 		fill(this.color);
@@ -142,4 +163,5 @@ function Game() {
 	this.deg = 0;
 	this.particles = [];
 	this.playerList = [];
+	this.hitCounter = 0;
 }
