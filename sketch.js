@@ -66,8 +66,14 @@ function draw()
 		for (var j = 0; j < gameState.particles.length; j++) {
 			if (gameState.particles[j].y == -150) {
 
-				console.log(gameState.particles[j].opp);
-				console.log(gameState.deg);
+				//console.log(gameState.particles[j].opp); //this is the angle of collision
+				//console.log(gameState.deg);
+
+				var angleCollision = gameState.particles[j].opp;
+
+				if (gameState.deg >= (angleCollision - 25) && gameState.deg <= (angleCollision + 25)) {
+					console.log("collision");
+				}
 				// var particleX = new Particle(gameState.particles[j].x, gameState.particles[j].y, gameState.deg, "black");
 				// hit = collideRectCircle(gameState.playerList[i].x,gameState.playerList[i].y,gameState.playerList[i].sizeX,gameState.playerList[i].sizeY,particleX.x,particleX.y,particleX.size);
 				
