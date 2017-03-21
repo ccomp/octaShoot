@@ -37,12 +37,9 @@ io.sockets.on('connection',
 		
 		///MY SOCKET EVENTS HERE
 
-		socket.on('drawing', function(data){
-			// send this drawing data to EVERYONE
-			// don't need to send back to the client it came from
-			socket.broadcast.emit('otherdrawing', data);
+		socket.on('gameState', function(data) {
+			socket.broadcast.emit('otherGameState', data);
 		});
-
 
 		socket.on('disconnect', function() {
 			console.log("Client has disconnected " + socket.id);
