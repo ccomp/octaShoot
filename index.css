@@ -2,8 +2,37 @@ body {
 	padding: 0;
 	margin: 0;
 	background-color: black;
-	font-family: "Calibri", "Roboto", sans-serif;
+}
 
+@font-face
+{
+	font-family: titleFont;
+	src: url(Bauhaus_.ttf);
+}
+
+header .title_centered
+{
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	padding-bottom: 25px;
+}
+
+.titulo
+{
+	text-align: center;
+	font-family: titleFont;
+	font-size: 72px;
+}
+
+.blueT
+{
+	color: blue;
+}
+
+.redT
+{
+	color: red;
 }
 
 #canvasContainer
@@ -27,10 +56,23 @@ body {
 
 .scoreboard
 {
+	margin-top: 50px;
+	font-family: 'Ubuntu', sans-serif;
 	float: right;
+	font-size: 24px;
 	max-width: 200px;
 	color: white;
 	margin-left: 30px;
+}
+
+#kills
+{
+	margin-bottom: 10px;
+}
+
+#playerCount
+{
+	margin-bottom: 10px;
 }
 
 #canvas

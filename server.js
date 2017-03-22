@@ -24,21 +24,27 @@ function requestHandler(req, res) {
   	
 }
 
-
 // WEBSOCKET PORTION
 
 var io = require('socket.io').listen(httpServer);
+var players = [];
 
-io.sockets.on('connection', 
+io.on('connection', 
 
 	function (socket) {
 	
 		console.log("We have a new client: " + socket.id);
-		
+		players.push(socket.id);
+
 		///MY SOCKET EVENTS HERE
 
 		socket.on('gameState', function(data) {
 			socket.broadcast.emit('otherGameState', data);
+			socket.emit('numberOfPlayers', players.length);
+		});
+
+		socket.on('particlePass', function(data) {
+			socket.broadcast.emit('otherParticle', data);
 		});
 
 		socket.on('disconnect', function() {

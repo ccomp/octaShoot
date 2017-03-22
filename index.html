@@ -2,6 +2,8 @@
 <head>
   <meta charset="UTF-8">
   
+
+
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
   <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
   <script language="javascript" type="text/javascript" src="libraries/p5.collide2d.js"></script>
@@ -10,24 +12,24 @@
   <!--<script language="javascript" src="libraries/p5.sound.js"></script>-->
   <script language="javascript" type="text/javascript" src="sketch.js"></script>
   <!-- this line removes any default padding and style. you might only need one of these values set. -->
+
+  <link href="//fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="index.css">
 </head>
 
 <body>
+	<header class="title_centered">
+		<h1 class="titulo"><span class="blueT">Octa</span><span class="redT">Pong</span></h1>
+	</header>
+
 	<div id="canvasContainer">
-		<section class="explanation">
-			<article>
-				<h1>//Welcome to CircleFall//</h1>
-				<p>Use the left and right arrow keys to maneuver the bottom blue bar.</p>
-				<p>The objective of the game is to collect as many green and white orbs as possible.</p>
-				<p>If you collide with three red orbs, you lose.</p>
-				<p>//Made by Cyron Completo using P5.js</p>
-			</article>
-		</section>
+		
 		<div id="canvas"></div>
 		<section class="scoreboard">
-			<div id="points"></div>
+			<div id="kills"></div>
 			<div id="lives"></div>
+			<div id="playerCount"></div>
+			<div id="connectionStatus"></div>
 		</section>
 	</div>
 </body>
