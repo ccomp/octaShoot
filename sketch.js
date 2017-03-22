@@ -87,7 +87,7 @@ function draw()
 				pop();
 
 				for (var i = 0; i < gameState.particles.length; i++) {
-					gameState.particles[i].y -= 5;
+					gameState.particles[i].y -= 10;
 					gameState.particles[i].display();
 				}
 
@@ -319,9 +319,11 @@ function Game() {
 
 socket.on('connect', function() {
 	console.log("Connected");
-	if (socket.id) {
-		gameState.id = socket.id;	
+	while (socket.id === undefined)
+	{
+		document.getElementById("connectionStatus").innerHTML = "Waiting for connection...";
 	}
+	gameState.id = socket.id;
 });
 
 socket.on('otherGameState', function(data) {

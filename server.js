@@ -48,6 +48,9 @@ io.on('connection',
 		});
 
 		socket.on('disconnect', function() {
+			for (var i = 0; i < players.length; i++) {
+				if (players[i] == socket.id) players.splice(i, 1);
+			}
 			console.log("Client has disconnected " + socket.id);
 		});
 	}
