@@ -65,6 +65,7 @@ function draw()
 
 			gameState.package = gameState.unpackager(gameState.package);
 			gameState.particlePackage = gameState.particleUnpackager(gameState.particlePackage);
+			gameState.connection = gameState.connectionUnpackager(gameState.connection);
 			if (gameState.alive) {
 
 				// document.getElementById(kills).innerHTML = "Kills: " + playerObj.kills;
@@ -93,6 +94,7 @@ function draw()
 
 				for (var i = 0; i < gameState.enemyPlayerList.length; i++) {
 					gameState.enemyPlayerList[i].display();
+					if (gameState.enemyPlayerList[i].color == "black") gameState.enemyPlayerList.splice(i, 1);
 					for (var j = 0; j < gameState.particles.length; j++) {
 						if (gameState.particles[j].y == -150) {
 
@@ -183,10 +185,11 @@ function draw()
 function keyPressed() {
 	if (keyCode === 32) {
 		if (playerObj != null) {
-			particleNew = new Particle(playerObj.x+25, playerObj.y + 150, gameState.deg, "red");
+			particleNew = new Particle(playerObj.x+25, playerObj.y + 150, gameState.deg, "blue");
 			gameState.particles.push(particleNew);
+			var particleDupe = new Particle(playerObj.x+25, playerObj.y + 150, gameState.deg, "red");
 			console.log(gameState.deg);
-			socket.emit('particlePass', particleNew);
+			socket.emit('particlePass', particleDupe);
 		}
 	}
 }
@@ -219,6 +222,18 @@ function Player()
 			this.color = "blue";
 		}
 	}
+
+	this.getRandomColor = function()
+	{
+	    var letters = '0123456789ABCDEF';
+	    var color = '#';
+	    for (var i = 0; i < 6; i++ )
+	    {
+	        color += letters[Math.floor(Math.random() * 16)];
+	    }
+	    return color;
+	}
+
 }
 
 function otherPlayer(deg, id)
@@ -232,6 +247,7 @@ function otherPlayer(deg, id)
 	this.id = id;
 	this.deg = radians(deg);
 	this.colorCounter = 0;
+	this.connection = true;
 
 	this.display = function()
 	{
@@ -283,7 +299,8 @@ function Particle(x, y, deg, color)
 	}
 }
 
-function Game() {
+function Game()
+{
 	this.firstAccess = true;
 	this.deg = 0;
 	this.particles = [];
@@ -294,6 +311,7 @@ function Game() {
 	this.id = null;
 	this.package = null;
 	this.particlePackage = null;
+	this.connection = null;
 
 	this.unpackager = function(data)
 	{
@@ -314,13 +332,29 @@ function Game() {
 		data = null;
 		return null;
 	}
+
+	this.connectionUnpackager = function(data)
+	{
+		if (data != null) {
+			for (var i = 0; i < this.enemyPlayerList.length; i++) {
+				if (this.enemyPlayerList[i].id == data)
+				{
+					this.enemyPlayerList[i].color = "black";
+					this.enemyPlayerList[i].display();
+				}
+			}
+		}
+		data = null;
+		return null;
+	}
 }
 
 
 socket.on('connect', function() {
 	console.log("Connected");
 	if (socket.id) {
-		gameState.id = socket.id;	
+		gameState.id = socket.id;
+		socket.emit('room', socket.id);
 	}
 });
 
@@ -346,4 +380,9 @@ socket.on('numberOfPlayers', function(num) {
 	} else {
 		document.getElementById("playerCount").innerHTML = "Waiting for other players to join.";
 	}
+});
+
+socket.on('disconnected', function(data)
+{
+	gameState.connection = data;
 });
