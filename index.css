@@ -12,17 +12,22 @@ body {
 
 header .title_centered
 {
-	margin-left: auto;
-	margin-right: auto;
-	text-align: center;
 	padding-bottom: 25px;
+}
+
+#playerCount
+{
+	font-family: 'Ubuntu', sans-serif;
+	position: absolute;
+	top: 90%;
+	left: 90%;
+	color: white;
 }
 
 .titulo
 {
-	text-align: center;
 	font-family: titleFont;
-	font-size: 72px;
+	font-size: 48px;
 }
 
 .blueT
@@ -42,7 +47,7 @@ header .title_centered
 	left: 50%;
 	top: 50%;
 	transform: translateX(-50%) translateY(-50%);
-	width: 70%;
+	/*width: 100%;*/
 }
 
 .explanation
@@ -54,6 +59,25 @@ header .title_centered
 	color: white;
 }
 
+#scoreList
+{
+	position: absolute;
+	top: 80%;
+    left: 50%;
+    margin-top: 50px;
+    transform: translate(-50%, -50%);
+}
+
+#scoreList li
+{
+	font-family: 'Ubuntu', sans-serif;
+	display: inline;
+	float: left;
+	list-style-type: none;
+	padding-right: 40px;
+	color: white;
+}
+/*
 .scoreboard
 {
 	margin-top: 50px;
@@ -79,3 +103,4 @@ header .title_centered
 {
 
 }
+*/

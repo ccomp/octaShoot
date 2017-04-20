@@ -8,6 +8,10 @@ var polyPoints = 8;
 var angle = 6.283185307179586/polyPoints;
 // 153.07337294603593
 
+function init() {
+
+}
+
 function setup() {
 	var myCanvas = createCanvas(600, 450);
 	myCanvas.parent("canvas");
@@ -42,14 +46,14 @@ function draw()
 			clearer = false;
 		}
 		textSize(28);
-		text("Welcome to OctaPong.", 0, 50);
-		text("You are the blue paddle.", 0, 100);
-		text("Use the left and right arrow keys to rotate.", 0, 150);
-		text("Use spacebar to shoot.", 0, 200);
-		text("Your goal is to eliminate the opposition.", 00, 250);
-		text("You have 5 lives, don't get hit!", 0, 300);
-		// text("You have 5 lives.", 0, 400);
-		text("Press any key to start.", 0, 400);
+		// text("Welcome to OctaPong.", 0, 50);
+		// text("You are the blue paddle.", 0, 100);
+		// text("Use the left and right arrow keys to rotate.", 0, 150);
+		// text("Use spacebar to shoot.", 0, 200);
+		// text("Your goal is to eliminate the opposition.", 00, 250);
+		// text("You have 5 lives, don't get hit!", 0, 300);
+		// // text("You have 5 lives.", 0, 400);
+		text("Press any key to join the server.", 100, 200);
 		fill(255);
 		if (keyIsPressed === true) {
 			playerObj = new Player();
@@ -183,7 +187,7 @@ function draw()
 function keyPressed() {
 	if (keyCode === 32) {
 		if (playerObj != null) {
-			particleNew = new Particle(playerObj.x+25, playerObj.y + 150, gameState.deg, "red");
+			particleNew = new Particle(playerObj.x+25, playerObj.y + 150, gameState.deg, "blue");
 			gameState.particles.push(particleNew);
 			console.log(gameState.deg);
 			socket.emit('particlePass', particleNew);
@@ -349,3 +353,5 @@ socket.on('numberOfPlayers', function(num) {
 		document.getElementById("playerCount").innerHTML = "Waiting for other players to join.";
 	}
 });
+
+window.addEventListener('load', init);
