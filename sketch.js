@@ -5,11 +5,58 @@ var colorCounter = 0;
 var clearer = true;
 var polyRad = 200;
 var polyPoints = 8;
+var touchBool = false;
 var angle = 6.283185307179586/polyPoints;
 // 153.07337294603593
 
 function init() {
+	function handleOrientation(event) {
 
+		var alpha = Math.floor(event.alpha);
+		var beta = Math.floor(event.beta);
+		var gamma = Math.floor(event.gamma);
+
+		if (gameState != null) {
+			gameState.zOrientation = alpha;
+			gameState.yOrientation = beta;
+			gameState.xOrientation = gamma;
+			gameState.update(gameState.xOrientation);
+		}
+	}
+	function handleTouch(event) {
+		event.preventDefault();
+		if (gameState != null) {
+			if (gameState.firstAccess === false) {
+				if (playerObj != null) {
+					particleNew = new Particle(playerObj.x+25, playerObj.y + 150, gameState.deg, "blue");
+					gameState.particles.push(particleNew);
+					console.log(gameState.deg);
+					socket.emit('particlePass', particleNew);
+				}
+			}
+		}
+	}
+
+	var canvassio = document.getElementById("canvas");
+	window.addEventListener("deviceorientation", handleOrientation, true);
+	canvassio.addEventListener("touchstart", handleTouch, false);
+}
+
+function touchStarted() {
+	touchBool = true;
+}
+
+function touchEnded() {
+	// if (gameState != null) {
+	// 	if (gameState.firstAccess === false) {
+	// 		if (playerObj != null) {
+	// 			particleNew = new Particle(playerObj.x+25, playerObj.y + 150, gameState.deg, "blue");
+	// 			gameState.particles.push(particleNew);
+	// 			console.log(gameState.deg);
+	// 			socket.emit('particlePass', particleNew);
+	// 		}
+	// 	}
+	// }
 }
 
 function setup() {
@@ -55,13 +102,14 @@ function draw()
 		// // text("You have 5 lives.", 0, 400);
 		text("Press any key to join the server.", 100, 200);
 		fill(255);
-		if (keyIsPressed === true) {
+		if (keyIsPressed === true || touchBool === true) {
 			playerObj = new Player();
 			playerObj.id = gameState.id;
 			gameState.playerList.push(playerObj);
 			clearer = true;
 			gameState.alive = true;
 			gameState.firstAccess = false;
+			touchBool = false;
 		}
 	} else {
 		if (gameState.id) {
@@ -168,13 +216,13 @@ function draw()
 				textSize(32);
 				text("GAME OVER! Press any key to try again", 10, 150);
 				fill(255);
-				if (keyIsPressed === true) {
+				if (keyIsPressed === true || touchBool === true) {
 					playerObj = new Player();
 					playerObj.id = "gameState.id";
 					gameState.playerList.push(playerObj);
 					clearer = true;
 					gameState.alive = true;
-
+					touchBool = false;
 				}
 			}
 		} else {
@@ -288,6 +336,9 @@ function Particle(x, y, deg, color)
 }
 
 function Game() {
+	this.zOrientation = 0;
+	this.xOrientation = 0;
+	this.yOrientation = 0;
 	this.firstAccess = true;
 	this.deg = 0;
 	this.particles = [];
@@ -298,6 +349,14 @@ function Game() {
 	this.id = null;
 	this.package = null;
 	this.particlePackage = null;
+
+	this.update = function(x0)
+	{	
+		if (x0 > 90) x0 = 90;
+		else if (x0 < -90) x0 = -90;
+		x0 /= 10;
+		this.deg -= x0;
+	}
 
 	this.unpackager = function(data)
 	{
