@@ -50,9 +50,6 @@ function setup() {
 	var x0 = window.innerHeight/1.5;
 	var y0 = window.innerWidth/1.5;
 
-	if (window.innerHeight > window.innerWidth) polyRad = y0/2; 
-	else polyRad = y0/4.5;
-
 	console.log(y0);
 	var myCanvas = createCanvas(y0, x0);
 	myCanvas.parent("canvas");
