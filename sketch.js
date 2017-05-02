@@ -28,7 +28,7 @@ function init() {
 		if (gameState != null) {
 			if (gameState.firstAccess === false) {
 				if (playerObj != null) {
-					particleNew = new Particle(playerObj.x+25, playerObj.y + 150, gameState.deg, "blue");
+					particleNew = new Particle(playerObj.x+25, playerObj.y + (polyRad-40), gameState.deg, "blue");
 					gameState.particles.push(particleNew);
 					console.log(gameState.deg);
 					socket.emit('particlePass', particleNew);
@@ -36,7 +36,6 @@ function init() {
 			}
 		}
 	}
-
 	var canvassio = document.getElementById("canvas");
 	window.addEventListener("deviceorientation", handleOrientation, true);
 	canvassio.addEventListener("touchstart", handleTouch, false);
@@ -46,23 +45,20 @@ function touchStarted() {
 	touchBool = true;
 }
 
-function touchEnded() {
-	// if (gameState != null) {
-	// 	if (gameState.firstAccess === false) {
-	// 		if (playerObj != null) {
-	// 			particleNew = new Particle(playerObj.x+25, playerObj.y + 150, gameState.deg, "blue");
-	// 			gameState.particles.push(particleNew);
-	// 			console.log(gameState.deg);
-	// 			socket.emit('particlePass', particleNew);
-	// 		}
-	// 	}
-	// }
-}
-
 function setup() {
-	var myCanvas = createCanvas(600, 450);
+
+	var x0 = window.innerHeight/1.5;
+	var y0 = window.innerWidth/1.5;
+
+	if (window.innerHeight > window.innerWidth) polyRad = y0/2; 
+	else polyRad = y0/4.5;
+
+	console.log(y0);
+	var myCanvas = createCanvas(y0, x0);
 	myCanvas.parent("canvas");
 	frameRate(30);
+
+
 	// playerObj = new Player(); //add invincibility frames to each player upon loading in
 	// playerObj.id = "player";
 	gameState = new Game();
@@ -87,6 +83,7 @@ function recursePoly(x, y, theta)
 
 function draw() 
 {
+
 	if (gameState.firstAccess) {
 		if (clearer) {
 			clear();
@@ -146,7 +143,7 @@ function draw()
 				for (var i = 0; i < gameState.enemyPlayerList.length; i++) {
 					gameState.enemyPlayerList[i].display();
 					for (var j = 0; j < gameState.particles.length; j++) {
-						if (gameState.particles[j].y == -150) {
+						if (gameState.particles[j].y == -polyRad+40) {
 
 							var angleCollision = gameState.particles[j].opp; //this took me way too long to figure out
 
@@ -164,7 +161,7 @@ function draw()
 								}
 							}
 						}
-						else if (gameState.particles[j].y <= -180) gameState.particles.splice(j, 1);
+						else if (gameState.particles[j].y <= -polyRad+30) gameState.particles.splice(j, 1);
 					}
 				}
 
@@ -177,7 +174,7 @@ function draw()
 					gameState.playerList[i].interaction("", gameState.colorCounter);
 					gameState.playerList[i].display();
 					for (var j = 0; j < gameState.particles.length; j++) {
-						if (gameState.particles[j].y == -150) {
+						if (gameState.particles[j].y == -polyRad+40) {
 
 							var angleCollision = gameState.particles[j].opp; //this took me way too long to figure out
 
@@ -193,7 +190,7 @@ function draw()
 								}
 							}
 						}
-						else if (gameState.particles[j].y <= -180) gameState.particles.splice(j, 1);
+						else if (gameState.particles[j].y <= -polyRad+30) gameState.particles.splice(j, 1);
 					}
 				}
 				if (gameState.deg <= 0) {
@@ -235,7 +232,7 @@ function draw()
 function keyPressed() {
 	if (keyCode === 32) {
 		if (playerObj != null) {
-			particleNew = new Particle(playerObj.x+25, playerObj.y + 150, gameState.deg, "blue");
+			particleNew = new Particle(playerObj.x+25, playerObj.y + polyRad-40, gameState.deg, "blue");
 			gameState.particles.push(particleNew);
 			console.log(gameState.deg);
 			socket.emit('particlePass', particleNew);
@@ -256,7 +253,7 @@ function Player()
 
 	this.display = function()
 	{
-		translate(0, 160);
+		translate(0, polyRad-40);
 		fill(this.color);
 		rect(this.x, this.y, this.sizeX, this.sizeY);
 	}
@@ -293,7 +290,7 @@ function otherPlayer(deg, id)
 		push();
 
 		rotate(this.deg);
-		translate(0, 160);
+		translate(0, polyRad-40);
 		fill(this.color);
 		rect(this.x, this.y, this.sizeX, this.sizeY);
 		pop();
