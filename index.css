@@ -17,7 +17,7 @@ header .title_centered
 
 #playerCount
 {
-	font-family: 'Titillium Web', sans-serif;
+	font-family: 'Orbitron', sans-serif;
 	position: absolute;
 	top: 90%;
 	left: 90%;
@@ -63,6 +63,11 @@ header .title_centered
 	color: white;
 }
 
+.scoreboard
+{
+	font-size: 24px;
+}
+
 #scoreList
 {
 	position: absolute;
@@ -74,7 +79,7 @@ header .title_centered
 
 #scoreList li
 {
-	font-family: 'Titillium Web', sans-serif;
+	font-family: 'Orbitron', sans-serif;
 	display: inline;
 	float: left;
 	list-style-type: none;
