@@ -10,6 +10,10 @@ var angle = 6.283185307179586/polyPoints;
 // 153.07337294603593
 
 function init() {
+
+	var canvassio = document.getElementById("canvas");
+	var instructions = document.getElementById("instructions");
+
 	function handleOrientation(event) {
 
 		var alpha = Math.floor(event.alpha);
@@ -23,6 +27,7 @@ function init() {
 			gameState.update(gameState.xOrientation);
 		}
 	}
+
 	function handleTouch(event) {
 		event.preventDefault();
 		if (gameState != null) {
@@ -36,8 +41,17 @@ function init() {
 			}
 		}
 	}
-	var canvassio = document.getElementById("canvas");
+
+	function startGame(event) {
+		event.preventDefault();
+		var theGame = document.getElementById("gameContainer");
+		instructions.style.display = "none";
+		theGame.style.display = "block";
+	}
+
+
 	window.addEventListener("deviceorientation", handleOrientation, true);
+	instructions.addEventListener("touchstart", startGame, false);
 	canvassio.addEventListener("touchstart", handleTouch, false);
 }
 
@@ -94,9 +108,14 @@ function draw()
 		// text("Your goal is to eliminate the opposition.", 00, 250);
 		// text("You have 5 lives, don't get hit!", 0, 300);
 		// // text("You have 5 lives.", 0, 400);
-		text("Press any key to join the server.", 100, 200);
-		fill(255);
+		//text("Press any key to join the server.", width/4, 200);
+		//fill(255);
 		if (keyIsPressed === true || touchBool === true) {
+
+			var instructions = document.getElementById("instructions");
+			var theGame = document.getElementById("gameContainer");
+			instructions.style.display = "none";
+			theGame.style.display = "block";
 			playerObj = new Player();
 			playerObj.id = gameState.id;
 			gameState.playerList.push(playerObj);

@@ -17,7 +17,7 @@ header .title_centered
 
 #playerCount
 {
-	font-family: 'Ubuntu', sans-serif;
+	font-family: 'Titillium Web', sans-serif;
 	position: absolute;
 	top: 90%;
 	left: 90%;
@@ -26,7 +26,10 @@ header .title_centered
 
 .titulo
 {
-	font-family: titleFont;
+	/*font-family: titleFont;*/
+	/*font-family: Futura, "Trebuchet MS", Arial, sans-serif;*/
+	margin-left: 1%;
+	font-family: 'Orbitron', sans-serif;
 	font-size: 48px;
 }
 
@@ -65,42 +68,53 @@ header .title_centered
 	top: 80%;
     left: 50%;
     margin-top: 50px;
-    transform: translate(-50%, -50%);
+    transform: translate(-45%, -50%);
 }
 
 #scoreList li
 {
-	font-family: 'Ubuntu', sans-serif;
+	font-family: 'Titillium Web', sans-serif;
 	display: inline;
 	float: left;
 	list-style-type: none;
 	padding-right: 40px;
 	color: white;
 }
-/*
-.scoreboard
+
+#instructions
 {
-	margin-top: 50px;
-	font-family: 'Ubuntu', sans-serif;
-	float: right;
-	font-size: 24px;
-	max-width: 200px;
+	text-align: center;
+	max-width: 100%;
 	color: white;
-	margin-left: 30px;
+	font-family: 'Orbitron', sans-serif;
 }
 
-#kills
+#instructions h2
 {
-	margin-bottom: 10px;
+	clear: both;
+	font-size: 24px;
 }
 
-#playerCount
+#instructions div
 {
-	margin-bottom: 10px;
+	display: table;
+	margin: 0 auto;
 }
 
-#canvas
+#instructions figure
 {
-
+	float: left;
+	margin-left: 15%;
+	max-width: 25%;
 }
-*/
+
+#instructions figure img
+{
+	padding-top: 5px;
+	max-width: 50%;
+}
+
+#gameContainer
+{
+	display: none;
+}
